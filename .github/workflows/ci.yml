@@ -1,0 +1,50 @@
+ name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      # ✅ 单测（Vitest）
+      - name: Unit tests
+        run: pnpm test:run
+
+      # ✅ 安装 Playwright 浏览器依赖
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+
+      # ✅ E2E（Playwright 会按 playwright.config.ts 的 webServer 自动启动 Vite）
+      - name: E2E tests
+        env:
+          CI: true
+        run: pnpm exec playwright test
+
+      # ✅ 失败时上传 Playwright 报告（很有用）
+      - name: Upload Playwright Report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report

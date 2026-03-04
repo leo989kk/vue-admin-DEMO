@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from "vue";
 
-defineProps<{ msg: string }>()
+// 组件入参
+defineProps<{ msg: string }>();
 
-const count = ref(0)
+// 本地计数示例
+const count = ref(0);
 </script>
 
 <template>

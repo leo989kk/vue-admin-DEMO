@@ -1,14 +1,9 @@
-import {
-  createRouter,
-  createWebHashHistory,
-  type RouteRecordRaw,
-} from "vue-router";
-import HomePage from "../pages/HomePage.vue";
+// 路由组件导入
+import { createRouter, createWebHashHistory } from "vue-router";
+import { staticRoutes } from "./routes";
 
-const routes: RouteRecordRaw[] = [
-  { path: "/", name: "home", component: HomePage },
-];
+// 导出路由实例
 export const router = createRouter({
   history: createWebHashHistory(),
-  routes,
+  routes: staticRoutes,
 });
